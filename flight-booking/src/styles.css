@@ -1,0 +1,136 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|Josefin+Slab');
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    /*font-family: 'Josefin Sans', sans-serif;*/
+    font-family: 'Josefin Slab', serif;  
+}
+
+l {
+  list-style: none;
+}
+
+li {
+  display: inline-block;
+  margin: 0 20px;
+  transition: all 0.2s;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  &:after {
+    display: block;
+    content: '';
+    width: 0;
+    height: 2px;
+    background-color: #fff;
+    transition: all 0.5s ease-in-out;
+    margin: 3px auto 0 auto;
+  }
+  &:hover:after {
+    width: 100%;
+  }
+  svg {
+    width: 25px;
+    margin: 0 auto;
+    padding-bottom: 5px;
+    display: block;
+  }
+  a {
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    margin: 0 auto;
+    text-align: center;
+  } 
+}
+
+@keyframes rocket-iginition-moving {
+    from {
+      transform: scale(1, 1) translate(0, 0);
+    }
+    to {
+      transform: scale(1.3, 1.3) translate(-5.5%, 5.5%);
+    }
+  }
+
+
+li:hover .rocket-ignition {
+  transform: scale(1, 1) translate(0, 0);
+  transform-origin: bottom left;
+  animation-name: rocket-iginition-moving;
+  animation-duration: 0.15s;
+  animation-iteration-count: infinite;
+}
+
+
+
+
+
+
+.star-list-item:hover .star {
+  transform: rotate(72deg);
+}
+
+.star {
+  transition: transform 0.2s;
+}
+
+@keyframes wave-1-movement {
+  0% {
+    opacity: 0;
+    transform: translate(45%, 45%) scale(0.2, 0.2);
+  }
+  50% {
+    opacity: 0;
+    transform: translate(45%, 45%) scale(0.2, 0.2);
+  }
+  100% {
+    opacity: 0.8;
+    transform: translate(0, 0) scale(1, 1);
+  }
+}
+
+@keyframes wave-2-movement {
+  from {
+    opacity: 0;
+    transform: translate(45%, 45%) scale(0.2, 0.2);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) scale(1, 1);
+  }
+}
+
+.wave {
+  opacity: 0;
+  transform: translate(45%, 45%) scale(0.2, 0.2);
+  animation-duration: 1.5s;
+}
+
+svg .wave {
+  transform: translate(0, 0) scale(1, 1);
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-out; 
+}
+
+li:hover .wave-1 {
+  animation-name: wave-1-movement;
+}
+
+li:hover .wave-2 {
+  animation-name: wave-2-movement;
+}
+
+input[type = "button"]{
+  width: 293px;
+  height: 37px;
+  border-radius: 2px;
+  background: transparent;
+  border: 2px solid;
+  cursor: pointer;
+  color: #262626;
+}

@@ -1,0 +1,28 @@
+.col{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 150px;
+}
+.col h3{
+    font-size: 1.8em;
+    color: #4caf50;
+}
+.col div{
+    color: #4caf50;
+    margin: 25px;
+    font-size: 150px;
+    animation: pulse 1.1s ease infinite;
+    opacity: .6;
+}
+
+@keyframes pulse{
+    70%{
+        opacity: 1;
+    }
+    80%{
+        transform: scale(0.8);
+       
+    }
+}

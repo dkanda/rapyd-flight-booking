@@ -1,0 +1,32 @@
+<form>
+  <section id="search" class="section section-search darken-1 white-text center scrollspy">
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <h3>Destination</h3>
+          <div class="input-field">
+            <input class="white grey-text autocomplete-destination" placeholder="Mars, ISS" type="text"
+              id="autocomplete-destination" name="destination" [(ngModel)]="destination">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div>
+    <select  style="display: block" name="selectedCurrencyID" required [(ngModel)]="selectedCurrencyID"> 
+      <option *ngFor="let plan of currencies" [ngValue]="plan.id">{{ plan.name }} - {{ plan.currency_code }}</option>
+    </select>
+  </div>
+  <section id="search" class="section section-search darken-1 white-text center scrollspy">
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <label for="depart">Departing</label>
+          <input type="date" name="depart" id="depart" [(ngModel)]="departDate">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <input type="button" value="submit booking" (click)="processData()">
+</form>

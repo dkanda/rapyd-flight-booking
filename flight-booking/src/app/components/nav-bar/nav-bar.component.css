@@ -1,0 +1,15 @@
+h2{
+    display: block;
+    height: 50px;
+    line-height: 50px;
+    width: 130px;
+    text-align: left;
+    cursor: pointer;
+    transition: all .22s ease;
+    user-select: none;
+    padding: 0 10px;;
+}
+
+h2:hover{
+   color: #4caf50;
+}

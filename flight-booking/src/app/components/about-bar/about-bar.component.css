@@ -1,0 +1,16 @@
+.col{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.col h2{
+    font-size: 26pt;
+    border-bottom: 2px solid #262626;
+    letter-spacing: 6px;
+    margin: 50px 0;
+}
+.col p{
+    padding: 20px 10px;
+    font-size: 1.3em;
+}

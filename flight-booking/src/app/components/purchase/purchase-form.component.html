@@ -1,0 +1,92 @@
+<div id="header_image">
+</div>
+<div id="main_content">
+  <div class="row">
+    <div class="col s1"></div>
+    <div class="col m7">
+      <div style="background-color: white;border-radius:20px;margin:10px;padding:20px">
+        Refundable, roundtrip. <br />
+        <h4>Enjoy your trip to {{data.destination}}</h4>
+        <table style="border:none">
+          <tr style="border:none">
+            <td style="padding: 5px 5px;">
+              {{data.departure | date:'shortDate'}} {{data.departure | date:'shortTime'}}
+            </td>
+            <td style="padding: 5px 5px;"> > </td>
+            <td style="padding: 5px 5px;">
+              {{data.arrival | date:'shortDate'}} {{data.arrival | date:'shortTime'}}
+            </td>
+            <td style="padding: 5px 5px;"> > </td>
+            <td style="padding: 5px 5px;">
+              {{data.return | date:'shortDate'}} {{data.return | date:'shortTime'}}
+            </td>
+          </tr>
+          <tr style="border:none">
+            <td style="padding: 5px 5px;">
+              Earth
+            </td>
+            <td style="padding: 5px 5px;"> > </td>
+            <td style="padding: 5px 5px;">
+              {{data.destination}}
+            </td>
+            <td style="padding: 5px 5px;"> > </td>
+            <td style="padding: 5px 5px;">
+              Earth
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="col s3">
+      <div style="background-color: white;border-radius:20px;margin:10px;padding:20px">
+        <h4>Price summary</h4>
+        <table style="border:none">
+          <tr style="border:none">
+            <td style="padding: 5px 5px;">
+              Earth - {{data.destination}},
+              {{data.departure | date:'MMM dd'}}, {{data.departure | date:'shortTime'}}
+            </td>
+          </tr>
+        </table>
+        <table style="border:none">
+          <tr style="border:none">
+            <td style="padding: 5px 5px;">
+             Refundable Roundtrip (1 Adult)
+            </td>
+            <td>
+              {{(data.price*exchangeRate) | currency:currencyService.selectedCurrencyCode:"symbol":".0-0"}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Taxes and fees
+            </td>
+            <td style="border:none">
+              {{1000*exchangeRate | currency:currencyService.selectedCurrencyCode:"symbol":".0-0"}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Total
+            </td>
+            <td style="border:none">
+              {{1000 + (data.price*exchangeRate) | currency:currencyService.selectedCurrencyCode:"symbol":".0-0"}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Deposit due today
+            </td>
+            <td style="border:none">
+              {{(1000 + data.price)*exchangeRate/2 | currency:currencyService.selectedCurrencyCode:"symbol":".0-0"}}
+            </td>
+          </tr>
+        </table>
+        <div style="text-align:center">
+          <button [class.spinner]="loading" [disabled]="loading" (click)="purchase()">Purchase</button>
+        </div>
+      </div>
+    </div>
+    <div class="col s1"></div>
+  </div>
+</div>

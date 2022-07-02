@@ -1,0 +1,86 @@
+<div id="header_image">
+</div>
+<div id="main_content">
+	<div class="row">
+		<div class="col s1"></div>
+		<div class="col m10" style="background-color: white;border-radius:20px;">
+			<div class="row">
+				<div class="col s8">
+					<div class="container">
+						<div class="row">
+							<div class="col s12">
+								<div *ngIf="!conf">
+									<h3>Confirmation Number</h3>
+									<div class="input-field">
+									<input class="white grey-text autocomplete-destination" placeholder="NTT0B" type="text"
+										name="confInput" [(ngModel)]="confInput">
+									</div>
+									<input type="button" value="Submit Booking" (click)="processData()">
+								</div>					
+							</div>
+							<div *ngIf="isError">
+								<h3>Cool your engines.</h3>
+								We have not received confirmation of payment from the payment processor you chose. <br/> 
+								Please complete your payment <a href="https://sandboxcheckout.rapyd.net/?token={{dataArr.checkout_id}}">here.</a><br />
+							</div>
+							<div *ngIf="!refunded && !isError && conf">
+								<h3> Finish payment to complete checkin</h3>
+								Amount: {{dataArr.amount}} {{dataArr.currency_code}}<br />
+								<table style="border:none">
+									<tr style="border:none">
+										<td style="padding: 5px 5px;">
+											{{flights.departure | date:'shortDate'}} {{flights.departure | date:'shortTime'}}
+										</td>
+										<td style="padding: 5px 5px;"> > </td>
+										<td style="padding: 5px 5px;">
+											{{flights.arrival | date:'shortDate'}} {{flights.arrival | date:'shortTime'}}
+										</td>
+										<td style="padding: 5px 5px;"> > </td>
+										<td style="padding: 5px 5px;">
+											{{flights.return | date:'shortDate'}} {{flights.return | date:'shortTime'}}
+										</td>
+									</tr>
+									<tr style="border:none">
+										<td style="padding: 5px 5px;">
+											Earth
+										</td>
+										<td style="padding: 5px 5px;"> > </td>
+										<td style="padding: 5px 5px;">
+											{{flights.destination}}
+										</td>
+										<td style="padding: 5px 5px;"> > </td>
+										<td style="padding: 5px 5px;">
+											Earth
+										</td>
+									</tr>
+								</table>
+								<h4>{{dataArr.amount}} {{dataArr.currency_code}} is due before launch {{flights.departure |
+									date:'shortDate'}}</h4>
+								<input type="button" value="Complete Payment" (click)="finishPayment()"/>
+							</div>
+							<div *ngIf="refunded">
+								<h3> Your flight was successfully refunded: {{dataArr.amount}} {{dataArr.currency_code}}</h3>
+								Please fly again with us soon <br />
+							</div>
+						</div>
+					  </div>
+				</div>
+				<div class="col s4">
+					<div *ngIf="!refunded && !isError && conf">
+						<h4>Made a mistake?</h4>
+						<div class="hlr-detail-1">
+							<input type="button" value="Request Refund" (click)="requestRefund(dataArr.id, dataArr.merchant_reference_id)" />
+						</div>
+						<span [innerHTML]="refundResponse"></span>
+					</div>
+				</div>
+				<table>
+					<tr>
+						<td></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="col s1"></div>
+	</div>
+</div>

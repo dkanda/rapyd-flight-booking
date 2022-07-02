@@ -1,0 +1,31 @@
+#bio{
+    padding: 20px 10px;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.bar{
+    transform-origin: center;
+    width: calc(100% - 20px);
+    font-size: 1.3em;
+    background: #e9c0c080;
+    padding: 10px;
+    line-height: 30px;
+    margin: 2px 0;
+    height: 30px;
+    box-shadow: 0px 5px 5px rgba(0,0,0,0.16);
+    animation: stagger 0.3s cubic-bezier(.17,.67,.83,.67);
+}
+
+@keyframes stagger{
+    from{
+        opacity: 0;
+        transform: translateX(-115px);
+        
+    }
+    to{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

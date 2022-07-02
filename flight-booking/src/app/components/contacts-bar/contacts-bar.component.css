@@ -1,0 +1,40 @@
+.row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 75px 0;
+    padding-bottom: 25px;
+    box-shadow:0  2px 0 #ff5722;
+}
+.col{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.col h2{
+    margin: 15px 0;
+    font-weight: lighter;
+}
+a:link, a:visited{
+    text-decoration: none;
+    color: #ff5722;
+    font-size: 2.5em;
+    filter: grayscale(0.85);
+    transition: all 0.22s ease;
+
+}
+
+ a:hover{
+    filter: grayscale(0);
+}
+
+iframe{
+    filter: grayscale(1);
+    transition: all .12s ease;
+}
+
+iframe:hover{
+    filter: grayscale(0);
+}

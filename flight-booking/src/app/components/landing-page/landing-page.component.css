@@ -1,0 +1,41 @@
+#world {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(#000000, #c7c9ea);
+  z-index: -1;
+}
+#hero{
+    width: 100%;
+    padding-top: 30vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#h1{
+    font-size:5em;
+    letter-spacing: 100px;
+    text-align: center;
+    font-weight: lighter;
+    padding-left: 100px;
+    transform-origin: center;
+}
+#h3{
+    font-size:1.5em;
+    letter-spacing: 15px;
+    padding-left: 15px;
+    text-align: center;
+    transform-origin: center; 
+}
+
+#hero input {
+    background: transparent;
+    padding: 20px 60px;
+    margin-top: 80px;
+    border: 2px solid #262626;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #262626;
+}

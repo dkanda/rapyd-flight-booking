@@ -1,0 +1,60 @@
+<div id="header_image">
+</div>
+<div id="main_content">
+	<div class="row" >
+		<div class ="col s1"></div>
+		<div class ="col m10" style="background-color: white;border-radius:20px;">
+			<div *ngFor="let data of dataArr" class="row">
+				<div class="col s6">
+					<table style="border:none">
+						<tr style="border:none">
+							<td style="padding: 5px 5px;">
+								{{data.departure | date:'shortDate'}} {{data.departure | date:'shortTime'}} 
+							</td>
+							<td style="padding: 5px 5px;"> > </td>
+							<td style="padding: 5px 5px;">
+								{{data.arrival | date:'shortDate'}} {{data.arrival | date:'shortTime'}}
+							</td>
+							<td style="padding: 5px 5px;"> > </td>
+							<td style="padding: 5px 5px;">
+								{{data.return | date:'shortDate'}} {{data.return | date:'shortTime'}}
+							</td>
+						</tr>
+						<tr style="border:none">
+							<td style="padding: 5px 5px;">
+								Earth
+							</td>
+							<td style="padding: 5px 5px;"> > </td>
+							<td style="padding: 5px 5px;">
+								{{data.destination}}
+							</td>
+							<td style="padding: 5px 5px;"> > </td>
+							<td style="padding: 5px 5px;">
+								Earth
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="col s3">
+					<div>
+						<h4>{{(data.return - data.departure) / (1000 * 60 * 60)}} hrs.</h4>
+						<div class="hlr-detail-1">
+							Flight No: {{data.flightNo}}
+							
+						</div>
+					</div>
+				</div>
+				<div class="col s3">
+					<div>
+						<h4>{{(data.price * exchangeRate) | currency:currencyService.selectedCurrencyCode:"symbol":".0-0"}}</h4>
+						<div class="hlr-detail-1">
+							<button (click) = "proceedToPurchase(data)">Purchase</button>
+						</div>
+					</div>
+				</div>
+				<table><tr><td></td></tr></table>
+			</div>
+		</div>
+		<div class ="col s1"></div>
+	</div>
+</div>

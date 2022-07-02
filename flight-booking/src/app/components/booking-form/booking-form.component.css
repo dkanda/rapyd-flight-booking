@@ -1,0 +1,76 @@
+
+*{
+    outline: none;
+}
+input[type = "text"]{
+    width: 270px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 2px;
+}
+label {
+    display: block;
+    font-size: 1.5em;
+}
+
+#select{
+    width: 295px;
+    padding: 10px;
+    border: none;
+    border-radius: 2px;
+}
+
+table{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+input[type = "date"]{
+    padding: 7px 0;
+    border: none;
+    border-radius: 2px;
+}
+table tr td{
+    
+    width: 150px;
+}
+input[type = "button"]{
+    width: 293px;
+    height: 37px;
+    border-radius: 2px;
+    background: transparent;
+    border: 2px solid;
+    cursor: pointer;
+    color: #262626;
+}
+
+h3{
+    font-size: 1.5em;
+}
+
+form{
+    position: absolute;
+    display: block;
+    left: 50%;
+    margin-top: 15vh;
+    transform: translate(-50%);
+}
+
+.slider .btn {
+  margin-top: 20px;
+}
+
+.section-search input {
+  padding: 5px !important;
+  font-size: 18px !important;
+  width: 90% !important;
+  border: #f4f4f4 3px solid !important;
+}
+
+.section-follow .fa-4x {
+  margin: 5px 10px;
+}
+
+.section-contact h5 {
+  margin-bottom: 30px;
+}
