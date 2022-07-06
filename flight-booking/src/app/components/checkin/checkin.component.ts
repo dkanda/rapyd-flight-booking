@@ -12,9 +12,9 @@ import {DailyRate} from '../../model/dailyRate';
 import { SelectedFlightService } from 'src/app/services/selectedFlight.service';
 import { CurrencyService } from 'src/app/services/currency.service';
 
-import { catchError, flatMap, map } from 'rxjs/operators';
 import { RapydService } from 'src/app/services/rapyd.service';
-import { TouchSequence } from 'selenium-webdriver';
+
+declare const QRCode:any;
 
 
 @Component({
@@ -39,6 +39,7 @@ export class CheckinComponent implements OnInit {
   refundResponse = "";
   refunded = false;
   isError = false;
+  isPaid = false;
 
   dataArr: object;
 
@@ -83,12 +84,35 @@ export class CheckinComponent implements OnInit {
             } else {
               this.dataArr = success['details']
               this.refunded = this.dataArr['refunded']
+              this.dataArr['purchase_info'] = success['purchase_info']
+              this.dataArr['price'] = success['price']
               this.currencyService.selectedCurrencyCode = success['purchase_info']['preferred_currency'];
               this.currencyService.selectedCountryCode = success['purchase_info']['preferred_country_iso2'];
               this.flightService.getFlights(success['purchase_info']['flightNo']).subscribe(success => {
                 this.flights = success;
               });
+              if(success['purchase_info']['amt_paid'] >=  (this.dataArr['price'] - 1)){
+                this.isPaid = true;
+              }
+
             }
+            if (this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] === undefined){
+              this.rapydService.getExchangeRate("USD", this.currencyService.selectedCurrencyCode).subscribe(exchangeRate => {
+                console.log(exchangeRate);
+                this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] = 1/exchangeRate.rate;
+                // Store the exchange rate since it only changes once/day
+                sessionStorage.setItem(exchangeRate.sell_currency, (1/exchangeRate.rate).toString());
+              });
+            }
+            else {
+              this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode];
+            }
+
+            
+            let script = document.createElement('script');
+            script.setAttribute('type', 'text/javascript')
+            script.innerHTML = `new QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");`
+            document.querySelector('#qrcodeScript').appendChild(script)
           })
         }
         
@@ -96,17 +120,7 @@ export class CheckinComponent implements OnInit {
       }
     );
 
-    if (this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] === undefined){
-      this.rapydService.getExchangeRate("USD", this.currencyService.selectedCurrencyCode).subscribe(exchangeRate => {
-        console.log(exchangeRate);
-        this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] = 1/exchangeRate.rate;
-        // Store the exchange rate since it only changes once/day
-        sessionStorage.setItem(exchangeRate.sell_currency, (1/exchangeRate.rate).toString());
-      });
-    }
-    else {
-      this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode];
-    }
+    
   }
 
   finishPayment(){

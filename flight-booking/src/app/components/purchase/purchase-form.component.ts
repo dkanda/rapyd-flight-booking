@@ -13,12 +13,13 @@ import { SelectedFlightService } from 'src/app/services/selectedFlight.service';
 })
 export class PurchaseFormComponent implements OnInit {
 
-  destination : string = "";
-  departDate : string = "";
+  destination: string = "";
+  departDate: string = "";
   data: Flight;
   loading = false;
   exchangeRate = 1;
   amountDue = 0;
+  flightId = 0;
 
   BASE_URL = 'http://localhost:4200';
   MERCHANT_NAME = "Sling Shot Space";
@@ -28,10 +29,11 @@ export class PurchaseFormComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(
       params => {
-        if (this.selectedFlight.flight === undefined){
+        this.flightId = params['id']
+        if (this.selectedFlight.flight === undefined) {
           this.flightService.getFlights().subscribe(success => {
             let i = 0;
-            while(success[i].id != params['id']){
+            while (success[i].id != params['id']) {
               i++;
             }
             this.data = success[i];
@@ -41,30 +43,32 @@ export class PurchaseFormComponent implements OnInit {
         }
 
         this.currencyService.setCurrencyFromCurrencyID(params['curId'])
-        if(sessionStorage.getItem(this.currencyService.selectedCurrencyCode)){
+        if (sessionStorage.getItem(this.currencyService.selectedCurrencyCode)) {
           this.exchangeRate = parseFloat(sessionStorage.getItem(this.currencyService.selectedCurrencyCode))
         }
-        this.amountDue = (1000 + (this.data.price))/2; // Amount DUE in USD
+        this.amountDue = (1000 + (this.data.price)) / 2; // Amount DUE in USD
       }
     );
 
   }
 
-  purchase(){
+  purchase() {
     this.loading = true;
     this.rapydService.createCheckoutPage({
-      currency: this.currencyService.selectedCurrencyCode, 
-      country: this.currencyService.selectedCountryCode, 
+      currency: this.currencyService.selectedCurrencyCode,
+      country: this.currencyService.selectedCountryCode,
       flight: this.data['id']
     }).subscribe(success => {
       console.log(success);
-      document.location.href = success['url'];
-    });
+      this.router.navigate(['/purchase-success'],
+        { queryParams: { id: this.flightId, currency: this.currencyService.selectedCurrencyCode, conf: success['conf'] } }
+      );
+    })
   }
 
-  processData(){
+  processData() {
     this.router.navigate(['home'], {
-      queryParams:{
+      queryParams: {
         'destination': this.destination,
         'departDate': this.departDate,
       }

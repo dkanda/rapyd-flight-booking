@@ -7,13 +7,47 @@
 			<div class="row">
 				<div class="col s8">
 					<div *ngIf="isError">
-						<h3>Cool your engines.</h3>
-						We have not received confirmation of payment from the payment processor you chose. <br/> 
-						Please complete your payment <a href="https://sandboxcheckout.rapyd.net/?token={{dataArr.checkout_id}}">here.</a><br />
+						<h3>Place a deposit.</h3>
+						In order to secure your seat, please create a money transfer with the following details. <br /><br />
+						<div *ngIf="dataArr.purchase_info.amt_paid > 0">
+							We have recieved a payment of {{dataArr.purchase_info.amt_paid*exchangeRate |
+								currency:currencyService.selectedCurrencyCode:"symbol":".0-0"}} already.
+						</div>
+						<table>
+							<tr>
+								<td>
+									IBAN
+								</td>
+								<td>
+									{{dataArr.purchase_info.account_number}}
+								</td>
+							</tr>
+							<ng-template *ngIf="dataArr.purchase_info.routing !== null">
+								<tr>
+									<td>
+										Routing Number
+									</td>
+									<td>
+										{{dataArr.purchase_info.routing}}
+									</td>
+								</tr>
+							</ng-template>
+							<tr>
+								<td>
+									Amount
+								</td>
+								<td>
+									{{(1000 + (dataArr.price*exchangeRate)/2) - dataArr.purchase_info.amt_paid * exchangeRate |
+									currency:currencyService.selectedCurrencyCode:"symbol":".0-0"}}
+								</td>
+							</tr>
+						</table>
+						<input type="button" value="check" (click)="check()"/>
 					</div>
 					<div *ngIf="!refunded && !isError">
 						<h3> Your deposit is recieved! Confimation code: {{dataArr.merchant_reference_id}}</h3>
-						Amount: {{dataArr.amount}} {{dataArr.currency_code}}<br />
+						Amount: {{dataArr.purchase_info.amt_paid*exchangeRate |
+							currency:currencyService.selectedCurrencyCode:"symbol":".0-0"}}<br />
 						<table style="border:none">
 							<tr style="border:none">
 								<td style="padding: 5px 5px;">
@@ -44,6 +78,15 @@
 						</table>
 						<h4>{{dataArr.amount}} {{dataArr.currency_code}} is due before launch {{flights.departure |
 							date:'shortDate'}}</h4>
+							<table>
+								<tr>
+									<td>Date</td><td>Amount</td><td>Currency</td>
+								</tr>
+								<tr  *ngFor="let txn of dataArr.transactions">
+									<td>{{txn.created_at * 1000 | date}}</td><td>{{txn.amount}}</td><td>{{txn.currency}}</td>
+								</tr>
+
+							</table>
 					</div>
 					<div *ngIf="refunded">
 						<h3> Your flight was successfully refunded: {{dataArr.amount}} {{dataArr.currency_code}}</h3>
@@ -54,8 +97,8 @@
 					<div *ngIf="!refunded && !isError">
 						<h4>Made a mistake?</h4>
 						<div class="hlr-detail-1">
-							<button (click)="requestRefund(dataArr.id, dataArr.merchant_reference_id)">Request
-								Refund</button>
+							<input type="button" value="Request Refund" (click)="requestRefund(dataArr.id, dataArr.merchant_reference_id)"/>
+								
 						</div>
 						<span [innerHTML]="refundResponse"></span>
 					</div>

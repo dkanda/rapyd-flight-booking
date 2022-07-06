@@ -134,3 +134,55 @@ input[type = "button"]{
   cursor: pointer;
   color: #262626;
 }
+#site-title{
+  font-size:50px;
+}
+
+#satellite-glyph
+#rocket-glyph
+#star-glyph{
+  width: 100px;
+  text-align: center;
+}
+
+#nav{
+  height: 100px;
+}
+
+.barcode {
+  font-family: 'Libre Barcode 128';
+  font-size:150px;
+}
+
+@media only screen and (max-width: 500px) {
+  #site-title {
+    font-size: 30px;
+  }
+  .star-list-item{
+    height:10px;
+  }
+  nav-menu{
+    width:200px;
+  }
+  #satellite-glyph{
+    width: 50px;
+  }
+}
+
+@media only screen and (max-width: 300px) {
+  #site-title {
+    font-size: 30px;
+  }
+  
+  .star-list-item{
+    height:10px;
+  }
+
+  nav-menu{
+    width:150px;
+  }
+
+  #nav{
+    height: 150px;
+  }
+}
