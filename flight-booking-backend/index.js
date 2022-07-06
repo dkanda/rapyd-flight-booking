@@ -18,43 +18,45 @@ const { get } = require('request');
 const { query } = require('express');
 
 const db = require('better-sqlite3')('foobar.db', { verbose: console.log });
-// const drop = "DROP Table IF EXISTS flights;"
-// const drop = "DROP TABLE IF EXISTS purchases"
-// db.exec(drop, (err)=> console.log(err));
+const drop1 = "DROP Table IF EXISTS flights;"
+db.exec(drop1, (err)=> console.log(err));
 
-// const createFlightsTable = `CREATE TABLE flights (
-// 	id integer PRIMARY KEY,
-//    	destination text NOT NULL,
-// 	flightNo integer DEFAULT 0,
-//     price integer NOT NULL,
-//     departure Date NOT NULL,
-//     arrival Date NOT NULL,
-//     return Date NOT NULL,
-//     class text NOT NULL);`
-// db.exec(createFlightsTable, (err)=> console.log(err));
+const drop = "DROP TABLE IF EXISTS purchases"
+db.exec(drop, (err)=> console.log(err));
 
-// const createPurchasesTable = `CREATE TABLE purchases (
-// 	id integer PRIMARY KEY,
-//     flightNo integer,
-// 	merchant_id text NOT NULL,
-//     amt_paid integer default 0,
-//     issuing_id text NOT NULL,
-//     account_number text NOT NULL, 
-//     routing integer,
-//     final_checkout_id text,
-//     preferred_currency text default "USD",
-//     preferred_country_iso2 text default "US");`
-// db.exec(createPurchasesTable, (err)=> console.log(err));
+const createFlightsTable = `CREATE TABLE flights (
+	id integer PRIMARY KEY,
+   	destination text NOT NULL,
+	flightNo integer DEFAULT 0,
+    price integer NOT NULL,
+    departure Date NOT NULL,
+    arrival Date NOT NULL,
+    return Date NOT NULL,
+    class text NOT NULL);`
+db.exec(createFlightsTable, (err)=> console.log(err));
 
-// const createFxTable = `CREATE TABLE fx (
-//     id integer PRIMARY KEY,
-//     buy text NOT NULL,
-//     sell text NOT NULL,
-//     rate integer default 1,
-//     date text NOT NULL);`;
-//     db.exec(createFxTable, (err)=> console.log(err));
+const createPurchasesTable = `CREATE TABLE purchases (
+	id integer PRIMARY KEY,
+    flightNo integer,
+	merchant_id text NOT NULL,
+    amt_paid integer default 0,
+    issuing_id text NOT NULL,
+    account_number text NOT NULL, 
+    routing integer,
+    final_checkout_id text,
+    preferred_currency text default "USD",
+    preferred_country_iso2 text default "US");`
+db.exec(createPurchasesTable, (err)=> console.log(err));
 
-// db.exec(`INSERT INTO flights (id, destination, flightNo, price, departure, arrival, return, class) VALUES (1, 'Andromeda', 100, 150000, '${Date.now()}', '${Date.now() + 1000 * 60 * 60 * 15}', '${Date.now() + 1000 * 60 * 60 * 30}', 'yes')`, (err)=> console.log(err));
+const createFxTable = `CREATE TABLE fx (
+    id integer PRIMARY KEY,
+    buy text NOT NULL,
+    sell text NOT NULL,
+    rate integer default 1,
+    date text NOT NULL);`;
+    db.exec(createFxTable, (err)=> console.log(err));
+
+db.exec(`INSERT INTO flights (id, destination, flightNo, price, departure, arrival, return, class) VALUES (1, 'Andromeda', 100, 150000, '${Date.now()}', '${Date.now() + 1000 * 60 * 60 * 15}', '${Date.now() + 1000 * 60 * 60 * 30}', 'yes')`, (err)=> console.log(err));
 
 
 let dataArr = [
