@@ -2,4 +2,4 @@ build:
   docker:
     web: backend/dockerfile
 run:
-  web: flight-booking-backend npm start:prod
+  web: flight-booking-backend node index.js
