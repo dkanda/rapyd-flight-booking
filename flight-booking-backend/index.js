@@ -24,6 +24,9 @@ db.exec(drop1, (err)=> console.log(err));
 const drop = "DROP TABLE IF EXISTS purchases"
 db.exec(drop, (err)=> console.log(err));
 
+const drop2 = "DROP TABLE IF EXISTS fx"
+db.exec(drop2, (err)=> console.log(err));
+
 const createFlightsTable = `CREATE TABLE flights (
 	id integer PRIMARY KEY,
    	destination text NOT NULL,
