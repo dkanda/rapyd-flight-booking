@@ -32,7 +32,7 @@ export class FlightService {
      * Get flights
      * 
      */
-    public getFlights(id?: number): Observable<Array<Flight>>
+    public getFlights(id?: number): any
     {
 
         // if (petId === null || petId === undefined) {

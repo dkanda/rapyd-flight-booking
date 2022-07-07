@@ -237,8 +237,8 @@
 			  </div>
 			  
 			  <div class="ap2">
-				<span class="boarding-pass-h2">{{flights.destination.slice(0, 3) | uppercase}}</span>
-				<span class="boarding-pass-h3">{{flights.destination}}</span>
+				<span class="boarding-pass-h2">{{flights['destination'].slice(0, 3) | uppercase}}</span>
+				<span class="boarding-pass-h3">{{flights['destination']}}</span>
 			  </div>
 			</section>
 				  
@@ -249,7 +249,7 @@
 			 
 			 <div class="info">
 			   <span class="boarding-pass-h4">Flight</span>
-			   <span class="boarding-pass-h5">ST{{flights.flightNo}}</span>
+			   <span class="boarding-pass-h5">ST{{flights['flightNo']}}</span>
 			 </div>
 			 
 			 <div class="seat">
