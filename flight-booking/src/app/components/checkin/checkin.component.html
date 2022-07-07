@@ -24,8 +24,24 @@
 								Please complete your payment <a href="https://sandboxcheckout.rapyd.net/?token={{dataArr.checkout_id}}">here.</a><br />
 							</div>
 							<div *ngIf="isPaid">
-								<h3>Enjoy your flight!</h3>								
-								<span class="barcode">Let me In</span>
+								<h3>Enjoy your flight!</h3>	
+								<a class="btn modal-trigger" href="#modal1">Choose a seat</a>
+								<a class="btn modal-trigger" href="#modal2">View Boarding Pass</a>
+								
+								<h4>Payment History</h4>
+								<table>
+									<tr>
+										<td>Date</td>
+										<td>Amount</td>
+										<td>Currency</td>
+									</tr>
+									<tr *ngFor="let txn of dataArr.transactions">
+										<td>{{txn.created_at * 1000 | date}}</td>
+										<td>{{txn.amount}}</td>
+										<td>{{txn.currency}}</td>
+									</tr>
+		
+								</table>
 							</div>
 							<div *ngIf="!refunded && !isError && conf && !isPaid">
 								<h3> Finish payment to complete checkin</h3>
@@ -108,3 +124,150 @@
 		<div class="col s1"></div>
 	</div>
 </div>
+
+<!-- Pick a seat modal-->
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+		<div class="plane">
+			<div class="cockpit">
+			  <h1>ST</h1>
+			</div>
+			<div class="exit exit--front fuselage">
+			</div>
+			<ol class="cabin fuselage">
+			  <li class="row row--1">
+				<ol class="seats" type="A">
+				  <li class="seat">
+					<input type="checkbox" disabled id="1A" />
+					<label for="1A">1A</label>
+				  </li>
+				  <li class="seat">
+					<input type="checkbox" id="1B" />
+					<label for="1B">1B</label>
+				  </li>        
+				</ol>
+			  </li>
+			  <li class="row row--2">
+				<ol class="seats" type="A">
+				  <li class="seat">
+					<input type="checkbox" disabled id="2A" />
+					<label for="2A">2A</label>
+				  </li>
+				  <li class="seat">
+					<input type="checkbox" disabled id="2B" />
+					<label for="2B">2B</label>
+				  </li>
+				  
+				</ol>
+			  </li>
+			  <li class="row row--3">
+				<ol class="seats" type="A">
+				  <li class="seat">
+					<input type="checkbox" id="3A" />
+					<label for="3A">3A</label>
+				  </li>
+				  <li class="seat">
+					<input type="checkbox" id="3B" />
+					<label for="3B">3B</label>
+				  </li>
+				  
+				</ol>
+			  </li>
+			  <li class="row row--4">
+				<ol class="seats" type="A">
+				  <li class="seat">
+					<input type="checkbox" disabled id="4A" />
+					<label for="4A">4A</label>
+				  </li>
+				  <li class="seat">
+					<input type="checkbox" id="4B" />
+					<label for="4B">4B</label>
+				  </li>
+				  
+				</ol>
+			  </li>
+			  <li class="row row--5">
+				<ol class="seats" type="A">
+				  <li class="seat">
+					<input type="checkbox" id="5A" />
+					<label for="5A">5A</label>
+				  </li>
+				  <li class="seat">
+					<input type="checkbox" id="5B" />
+					<label for="5B">5B</label>
+				  </li>
+				  
+				</ol>
+			  </li>
+			  <li class="row row--6">
+				<ol class="seats" type="A">
+				  <li class="seat">
+					<input type="checkbox" id="6A" />
+					<label for="6A">6A</label>
+				  </li>
+				  <li class="seat">
+					<input type="checkbox" id="6B" />
+					<label for="6B">6B</label>
+				  </li>          
+				</ol>
+			  </li>
+			</ol>
+			<div class="exit exit--back fuselage">
+			  
+			</div>
+		  </div>
+    </div>
+    <div class="modal-footer">
+      <input type="button" class="modal-close waves-effect waves-green btn-flat" value="Save"/>
+    </div>
+  </div>
+
+  <!-- Pick a seat modal-->
+  <!-- Modal Structure -->
+  <div id="modal2" class="modal">
+    <div class="modal-content">
+		<div id="boardingPassContainer">
+		<div class="boarding-pass">
+			<header>Boarding Pass</header>
+			<section class="airport">
+			  <div class="ap1">
+			  <span class="boarding-pass-h2">TX</span>
+			  <span class="boarding-pass-h3">Earth (Texas)</span>
+			  </div>
+			  
+			  <div class="ap2">
+				<span class="boarding-pass-h2">{{flights.destination.slice(0, 3) | uppercase}}</span>
+				<span class="boarding-pass-h3">{{flights.destination}}</span>
+			  </div>
+			</section>
+				  
+		   <section class="details">
+			 <div class="passenger"><span class="boarding-pass-h4">Passenger</span>
+			 <span class="boarding-pass-h5">John Smith</span>
+			 </div>
+			 
+			 <div class="info">
+			   <span class="boarding-pass-h4">Flight</span>
+			   <span class="boarding-pass-h5">ST{{flights.flightNo}}</span>
+			 </div>
+			 
+			 <div class="seat">
+			   <span class="boarding-pass-h4">seat</span>
+			   <span class="boarding-pass-h5">A25</span>
+			 </div>
+			 
+			 <div class="gate">
+			   <span class="boarding-pass-h4">gate</span>
+			   <span class="boarding-pass-h5">E3</span>
+			 </div>
+			 
+			 <span class="barcode">Let me In</span>
+			</section>
+	
+		</div>
+	</div>
+    <div class="modal-footer">
+      <input type="button" class="modal-close waves-effect waves-green btn-flat" value="Close"/>
+    </div>
+  </div>

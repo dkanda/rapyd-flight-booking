@@ -1,6 +1,7 @@
 <nav>
     <div class="nav-wrapper" style="background-color: black;">
       <a routerLink=""class="brand-logo">Space Tours</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li><a routerLink="booking">Book</a></li>
         <li><a routerLink="checkin">Checkin</a></li>
@@ -8,6 +9,11 @@
       </ul>
     </div>
   </nav>
+  <ul class="sidenav" id="mobile-demo">
+    <li><a routerLink="booking">Book</a></li>
+    <li><a routerLink="checkin">Checkin</a></li>
+    <li><a routerLink="about">About</a></li>
+  </ul>
 <body>
     <div id="wrap">
         <router-outlet></router-outlet>

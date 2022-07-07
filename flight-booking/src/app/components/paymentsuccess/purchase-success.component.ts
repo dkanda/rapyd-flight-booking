@@ -63,6 +63,7 @@ export class PurchaseSuccessComponent implements OnInit {
       } else {
         this.isError = false;
         this.dataArr = success['details']
+        this.dataArr['price'] = success['price']
         this.dataArr['purchase_info'] = success['purchase_info']
         this.refunded = this.dataArr['refunded']
       }
@@ -81,6 +82,7 @@ export class PurchaseSuccessComponent implements OnInit {
           } else {
             this.isError = false;
             this.dataArr = success['details']
+            this.dataArr['price'] = success['price']
             this.dataArr['purchase_info'] = success['purchase_info']
             this.refunded = this.dataArr['refunded']
           }

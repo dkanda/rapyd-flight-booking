@@ -21,6 +21,14 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
   <script type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+        elems = document.querySelectorAll('.modal');
+        instances = M.Modal.init(elems);
+      });
+    </script>
 </head>
 
 <body>
