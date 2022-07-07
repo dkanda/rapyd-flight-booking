@@ -29,6 +29,7 @@ input[type = "date"]{
     padding: 7px 0;
     border: none;
     border-radius: 2px;
+    max-width: 200px;
 }
 table tr td{
     

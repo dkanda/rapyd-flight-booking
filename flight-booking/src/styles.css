@@ -154,7 +154,7 @@ input[type = "button"]{
   font-size:150px;
 }
 
-@media only screen and (max-width: 500px) {
+/* @media only screen and (max-width: 500px) {
   #site-title {
     font-size: 30px;
   }
@@ -185,4 +185,4 @@ input[type = "button"]{
   #nav{
     height: 150px;
   }
-}
+} */

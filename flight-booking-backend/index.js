@@ -26,27 +26,6 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(cors())
 
-app.get('/refundPayment', (req, res) => {
-    if (req.query.payment_id && req.query.merchant_reference_number) {
-        let body = {
-            payment: req.query.payment_id
-        }
-        api.makeRequest('POST', '/v1/refunds', body).then(function (response) {
-            if (response && response.statusCode == 200) {
-                //Store this value in the db
-                db.exec(`UPDATE purchases SET amt_paid = 0 WHERE merchant_id = '${req.query.merchant_reference_number}';`, (err) => console.log(err));
-                res.send(response.body);
-            } else {
-                res.send(response.body);
-            }
-
-        }).catch(function (e) {
-            console.error(e.message);
-            res.send("an error occurred");
-        })
-    }
-})
-
 app.get('/getPayments', (req, res) => {
     api.makeRequest('GET', `/v1/issuing/bankaccounts/${req.query.issuing}`).then(function (response) {
         if (response && response.statusCode == 200) {
@@ -153,10 +132,12 @@ app.post('/createPayout', (req, res) => {
     if (result.length < 0) {
         res.send("Err: merchant id does not exist");
     }
+    fxResult = db.prepare(`select rate from FX where sell='${req.query.currency}' and date = '${todayString}'`).all()
+    let fxRate = parseFloat(fxResult[0]['rate']);
 
     let body = {
         "ewallet": base_ewallet,
-        "payout_amount": result[0].amt_paid,
+        "payout_amount": result[0].amt_paid * fxRate,
         "sender_currency": base_currency,
         "sender_country": base_country,
         "beneficiary_country": result[0].preferred_country_iso2,
@@ -173,10 +154,18 @@ app.post('/createPayout', (req, res) => {
         console.log('>>>>>payout response<<<<')
         console.log(response)
         if (response && response.statusCode == 200) {
-            //Store this value in the db
-            res.send(response.body);
+            api.makeRequest('POST', `/v1/payouts/complete/${response.body.data.id}/${response.body.data.sender_amount}`).then(function (response1) {
+                if (response1 && response1.statusCode == 200) {
+                    //Store this value in the db
+                    console.log('>>>>>payment complete response1<<<<')
+                    console.log(response1)
+                    res.send(response1.body);
+                } else {
+                    res.send(response1.body);
+                }
+            });
         } else {
-            res.send(response.body);
+            res.send(response1.body);
         }
 
     }).catch(function (e) {
