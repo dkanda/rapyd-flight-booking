@@ -54,12 +54,13 @@ export class HomePageComponent implements OnInit {
         this.destination = params['destination'];
         this.departDate = params['departDate'];
         this.currencyService.setCurrencyFromCurrencyID(params['curId'])
+        this.flightService.getFlightsByDestination(this.destination).subscribe(success => {
+          this.dataArr = success;
+        });
       }
     );
 
-    this.flightService.getFlights().subscribe(success => {
-      this.dataArr = success;
-    });
+    
 
     if (this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] === undefined){
       this.rapydService.getExchangeRate("USD", this.currencyService.selectedCurrencyCode).subscribe(exchangeRate => {

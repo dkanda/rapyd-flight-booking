@@ -48,20 +48,19 @@ h3{
     font-size: 1.5em;
 }
 
-form{
+/* form{
     position: absolute;
     display: block;
     left: 50%;
     margin-top: 15vh;
     transform: translate(-50%);
-}
+} */
 
 .slider .btn {
   margin-top: 20px;
 }
 
 .section-search input {
-  padding: 5px !important;
   font-size: 18px !important;
   width: 90% !important;
   border: #f4f4f4 3px solid !important;
@@ -69,8 +68,4 @@ form{
 
 .section-follow .fa-4x {
   margin: 5px 10px;
-}
-
-.section-contact h5 {
-  margin-bottom: 30px;
 }

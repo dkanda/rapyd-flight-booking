@@ -8,13 +8,13 @@ import { Observable } from 'rxjs/Observable';
 
 import { ApiResponse } from '../model/apiResponse';
 import { DailyRate } from '../model/dailyRate';
-
+import { environment } from '../../environments/environment';
 
 
 @Injectable()
 export class RapydService {
 
-    protected basePath = 'http://localhost:3001';
+    protected basePath = environment.basePath;
     public storedExchange = {};
     public defaultHeaders = new HttpHeaders();
     // public configuration = new Configuration();

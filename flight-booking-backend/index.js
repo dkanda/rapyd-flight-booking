@@ -59,14 +59,14 @@ const createFxTable = `CREATE TABLE fx (
     date text NOT NULL);`;
     db.exec(createFxTable, (err)=> console.log(err));
 
-db.exec(`INSERT INTO flights (id, destination, flightNo, price, departure, arrival, return, class) VALUES (1, 'Andromeda', 100, 150000, '${Date.now()}', '${Date.now() + 1000 * 60 * 60 * 15}', '${Date.now() + 1000 * 60 * 60 * 30}', 'yes')`, (err)=> console.log(err));
+let september3 = new Date(1662261015000)
+let september4 = new Date(1662347415000)
+let september5 = new Date(1662433815000)
 
-
-let dataArr = [
-    {id:'1', destination: 'Andromeda', flightNo: 100, price: 150000, departure: Date.now(), arrival: Date.now() + 1000 * 60 * 60 * 15, return: Date.now() + 1000 * 60 * 60 * 30, class: "first"},
-    {id:'2', destination: 'Andromeda', flightNo: 100, price: 50000, departure: Date.now(), arrival: Date.now() + 1000 * 60 * 60 * 15 , return: Date.now() + 1000 * 60 * 60 * 30,class: "coach"},
-  ]
-
+db.exec(`INSERT INTO flights (id, destination, flightNo, price, departure, arrival, return, class) VALUES (1, 'Andromeda', 100, 150000, '${september3}', '${september3 + 1000 * 60 * 60 * 15}', '${september3 + 1000 * 60 * 60 * 30}', 'yes')`, (err)=> console.log(err));
+db.exec(`INSERT INTO flights (id, destination, flightNo, price, departure, arrival, return, class) VALUES (2, 'Andromeda', 100, 150000, '${september4}', '${september4 + 1000 * 60 * 60 * 15}', '${september4 + 1000 * 60 * 60 * 30}', 'yes')`, (err)=> console.log(err));
+db.exec(`INSERT INTO flights (id, destination, flightNo, price, departure, arrival, return, class) VALUES (3, 'Mars', 100, 150000, '${september3}', '${september3 + 1000 * 60 * 60 * 15}', '${september3 + 1000 * 60 * 60 * 30}', 'yes')`, (err)=> console.log(err));
+db.exec(`INSERT INTO flights (id, destination, flightNo, price, departure, arrival, return, class) VALUES (4, 'Mars', 100, 150000, '${september4}', '${september4 + 1000 * 60 * 60 * 15}', '${september4 + 1000 * 60 * 60 * 30}', 'yes')`, (err)=> console.log(err));
 const my_base_url = "http://davidkanda.com:4200"
 const enforce_final_price = true;
 
@@ -250,22 +250,6 @@ app.post('/createPayout', (req, res) => {
     })
 });
 
-app.get('/getBeneficiary', (req, res) => {
-    
-    api.makeRequest('GET', '/v1/merchants-portal/list/beneficiaries').then(function(response) {
-        if(response && response.statusCode == 200){
-            //Store this value in the db
-            res.send(response.body);
-        }else{
-            res.send(response.body);
-        }
-
-    }).catch(function(e) {
-        console.error(e.message);
-        res.send("an error occurred");
-    })
-})
-
 app.post('/createRefundPage', (req, res) => {
     result = db.prepare(`select preferred_country_iso2 from purchases where merchant_id='${req.query.merchant_reference_id}'`).all()
     if(result.length < 0){
@@ -279,10 +263,10 @@ app.post('/createRefundPage', (req, res) => {
         "merchant_reference_id": req.query.merchant_reference_id,
         "beneficiary_country": result[0]['preferred_country_iso2'],
         "beneficiary_entity_type": "individual",
-        "sender_currency": "USD",
-        "payout_currency": "EUR",
-        // "cancel_url": "http://example.com/cancel",
-        // "complete_url": "http://example.com/complete",
+        "sender_currency": base_currency,
+        "payout_currency": result[0]['preferred_currency'],
+        "cancel_url": "https://rapyd-flight-booking.vercel.app/checkin?conf=" + result[0]['merchant_id'],
+        "complete_url": "https://rapyd-flight-booking.vercel.app/refunded",
      }
 
     api.makeRequest('POST', '/v1/hosted/disburse/beneficiary', body).then(function(response) {
@@ -309,9 +293,12 @@ app.post('/createCheckoutUrl', (req, res) => {
     let todayString = getDate()
 
     let flightDetails = {} 
-    for(i=0; i<dataArr.length; i++){
-        if(dataArr[i].id == req.query.flight){
-            flightDetails = dataArr[i];
+
+    flights = db.prepare(`select * from flights`).all()
+
+    for(i=0; i<flights.length; i++){
+        if(flights[i].id == req.query.flight){
+            flightDetails = flights[i];
             break;
         }
     }
@@ -428,10 +415,11 @@ app.get('/getCheckout', (req, res) => {
                 // Only update the price if it's less that the total price paid.
                 console.log(result[0]['amt_paid'])
                 console.log((1000 + (price))/2)
-                if (result[0]['amt_paid'] < price){
-                    db.exec(`UPDATE purchases SET amt_paid = ${totalAmtPaid} WHERE id = ${result[0]['id']};`, (err)=> console.log(err));
+                db.exec(`UPDATE purchases SET amt_paid = ${totalAmtPaid} WHERE id = ${result[0]['id']};`, (err)=> console.log(err));
+                result[0]['amt_paid'] = totalAmtPaid;
+                if (totalAmtPaid < price){
                     // If the amount was less than the deposit
-                    if(result[0]['amt_paid'] < (1000 + (price))/2){
+                    if(totalAmtPaid < (1000 + (price))/2){
                         res.send({"status": "ERROR", "price": price, "issuing_id": issuing_id, "purchase_info": result[0]});
                         return
                     }
@@ -486,8 +474,12 @@ app.get('/flights', (req, res) => {
     if(req.query.id !== undefined){
         let result = db.prepare(`SELECT * from flights where id = ${req.query.id};`).all();
         res.json(result[0])
+    } else if(req.query.destination !== undefined){
+        let result = db.prepare(`SELECT * from flights where destination = '${req.query.destination}';`).all();
+        res.json(result)
     } else {
-        res.json(dataArr)
+        flights = db.prepare(`select * from flights`).all()
+        res.json(flights)
     }
 })
 

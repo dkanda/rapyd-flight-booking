@@ -106,21 +106,11 @@ export class CheckinComponent implements OnInit {
             }
             else {
               this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode];
-            }
-
-            
-            let script = document.createElement('script');
-            script.setAttribute('type', 'text/javascript')
-            script.innerHTML = `new QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");`
-            document.querySelector('#qrcodeScript').appendChild(script)
+            }          
           })
-        }
-        
-        
+        }        
       }
     );
-
-    
   }
 
   finishPayment(){

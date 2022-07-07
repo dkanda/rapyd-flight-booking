@@ -90,7 +90,7 @@
 					  </div>
 				</div>
 				<div class="col s4">
-					<div *ngIf="!refunded && !isError && conf">
+					<div *ngIf="!refunded && !isError && conf && !isPaid">
 						<h4>Made a mistake?</h4>
 						<div class="hlr-detail-1">
 							<input type="button" value="Request Refund" (click)="requestRefund(dataArr.id, dataArr.merchant_reference_id)" />

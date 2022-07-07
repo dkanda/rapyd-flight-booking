@@ -24,7 +24,7 @@ export class PurchaseFormComponent implements OnInit {
   BASE_URL = 'http://localhost:4200';
   MERCHANT_NAME = "Sling Shot Space";
 
-  constructor(private route: ActivatedRoute, private router: Router, protected selectedFlight: SelectedFlightService, protected flightService: FlightService, protected currencyService: CurrencyService, protected rapydService: RapydService) { }
+  constructor(private route: ActivatedRoute, private router: Router, public selectedFlight: SelectedFlightService, public flightService: FlightService, public currencyService: CurrencyService, protected rapydService: RapydService) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(
