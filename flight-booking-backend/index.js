@@ -417,17 +417,17 @@ app.get('/getCheckout', (req, res) => {
                 console.log((1000 + (price))/2)
                 db.exec(`UPDATE purchases SET amt_paid = ${totalAmtPaid} WHERE id = ${result[0]['id']};`, (err)=> console.log(err));
                 result[0]['amt_paid'] = totalAmtPaid;
-                if (totalAmtPaid < price){
+                if (totalAmtPaid + 1 < price){
                     // If the amount was less than the deposit
-                    if(totalAmtPaid < (1000 + (price))/2){
-                        res.send({"status": "ERROR", "price": price, "issuing_id": issuing_id, "purchase_info": result[0]});
+                    if(totalAmtPaid + 1 < (1000 + (price))/2){
+                        res.send({"status": "ERROR", "price": price, "details": response.body.data, "issuing_id": issuing_id, "purchase_info": result[0]});
                         return
                     }
                 }
                 
                 res.send({"status": "SUCCESS", "details": response.body.data, "price": price, "purchase_info": result[0]});
             } else {
-                res.send({"status": "ERROR", "price": price, "issuing_id": issuing_id, "purchase_info": result[0]});
+                res.send({"status": "ERROR", "price": price, "details": response.body.data, "issuing_id": issuing_id, "purchase_info": result[0]});
             }
         }else{
             res.send(response.body);
