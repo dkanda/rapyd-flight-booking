@@ -202,21 +202,21 @@ app.post('/createClientWallet', (req, res) => {
 
 app.post('/createPayout', (req, res) => {
 
-    req = {body : {data: { 
-        "ewallet": base_ewallet,
-        "payout_amount": 10,
-        "sender_currency": "USD",
-        "sender_country": "US",
-        "beneficiary_country": "US",
-        "payout_currency": "USD",
-        "sender_entity_type": "company",
-        "beneficiary_entity_type": "individual",
-        "id": "beneficiary_5dbcaf4492f6ac5abfd48442d7b3a819",
-        "sender": [],
-        "description": "Payout to card"
-    }}}
+    // req = {body : {data: { 
+    //     "ewallet": base_ewallet,
+    //     "payout_amount": 10,
+    //     "sender_currency": "USD",
+    //     "sender_country": "US",
+    //     "beneficiary_country": "US",
+    //     "payout_currency": "USD",
+    //     "sender_entity_type": "company",
+    //     "beneficiary_entity_type": "individual",
+    //     "id": "beneficiary_5dbcaf4492f6ac5abfd48442d7b3a819",
+    //     "sender": [],
+    //     "description": "Payout to card"
+    // }}}
     
-    result = db.prepare(`select * from purchases where merchant_id='X24E6R'`).all()
+    result = db.prepare(`select * from purchases where merchant_id='${req.body.data.merchant_reference_id}' and amt_paid > 0`).all()
     if(result.length < 0){
         res.send("Err: merchant id does not exist");
     }
@@ -251,7 +251,7 @@ app.post('/createPayout', (req, res) => {
 });
 
 app.post('/createRefundPage', (req, res) => {
-    result = db.prepare(`select preferred_country_iso2 from purchases where merchant_id='${req.query.merchant_reference_id}'`).all()
+    result = db.prepare(`select preferred_country_iso2 from purchases where merchant_id='${req.query.merchant_reference_id}' and amt_paid > 0`).all()
     if(result.length < 0){
         res.send("Err: merchant id does not exist");
     }
