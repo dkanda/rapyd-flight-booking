@@ -132,7 +132,7 @@ app.post('/createPayout', (req, res) => {
     if (result.length < 0) {
         res.send("Err: merchant id does not exist");
     }
-    fxResult = db.prepare(`select rate from FX where sell='${req.query.currency}' and date = '${getDate()}'`).all()
+    fxResult = db.prepare(`select rate from FX where sell='${req.body.data.payout_currency}' and date = '${getDate()}'`).all()
     let fxRate = parseFloat(fxResult[0]['rate']);
 
     let body = {
