@@ -29,6 +29,7 @@ function seedDb(){
         account_number text NOT NULL, 
         routing integer,
         final_checkout_id text,
+        is_refunded integer default 0,
         preferred_currency text default "USD",
         preferred_country_iso2 text default "US");`
     db.exec(createPurchasesTable, (err)=> console.log(err));

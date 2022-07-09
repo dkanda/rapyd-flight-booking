@@ -112,54 +112,52 @@ app.post('/createClientWallet', (req, res) => {
     })
 })
 
-app.post('/createPayout', (req, res) => {
 
-    // req = {body : {data: { 
-    //     "ewallet": base_ewallet,
-    //     "payout_amount": 10,
-    //     "sender_currency": "USD",
-    //     "sender_country": "US",
-    //     "beneficiary_country": "US",
-    //     "payout_currency": "USD",
-    //     "sender_entity_type": "company",
-    //     "beneficiary_entity_type": "individual",
-    //     "id": "beneficiary_5dbcaf4492f6ac5abfd48442d7b3a819",
-    //     "sender": [],
-    //     "description": "Payout to card"
-    // }}}
 
-    result = db.prepare(`select * from purchases where merchant_id='${req.body.data.merchant_reference_id}' and amt_paid > 0`).all()
+
+app.post('/createRefund', (req, res) => {
+    result = db.prepare(`select * from purchases where merchant_id='${req.query.merchant_reference_id}' and amt_paid > 0 and is_refunded = 0`).all()
     if (result.length < 0) {
         res.send("Err: merchant id does not exist");
     }
-    fxResult = db.prepare(`select rate from FX where sell='${req.body.data.payout_currency}' and date = '${getDate()}'`).all()
+    fxResult = db.prepare(`select rate from FX where sell='${result[0]['preferred_currency']}' and date = '${getDate()}'`).all()
     let fxRate = parseFloat(fxResult[0]['rate']);
 
     let body = {
+        "payout_method_type": (result[0]['preferred_country_iso2']).toLowerCase() + "_general_bank",
         "ewallet": base_ewallet,
-        "payout_amount": result[0].amt_paid * fxRate,
-        "sender_currency": base_currency,
+        "payout_amount": result[0].amt_paid / fxRate,
+        "sender_currency": result[0].preferred_currency,
         "sender_country": base_country,
         "beneficiary_country": result[0].preferred_country_iso2,
         "payout_currency": result[0].preferred_currency,
         "sender_entity_type": "company",
         "beneficiary_entity_type": "individual",
-        "beneficiary": req.body.data.id,
-        "sender": [],
-        "description": "Refund"
+        "beneficiary": req.query,
+        "sender": {
+            "name": "Space Tours",
+            "country": base_country,
+            "city": "new york",
+            "address": "1 main st",
+            "currency": result[0].preferred_currency,
+            "entity_type": "company",
+            "identification_type": "12345",
+            "identification_value": "0123456789",
+        },
+        "description": "Refund",
+        "merchant_reference_id": req.query.merchant_reference_id,
+
     }
-    console.log(body)
 
     api.makeRequest('POST', '/v1/payouts', body).then(function (response) {
-        console.log('>>>>>payout response<<<<')
-        console.log(response)
-        if (response && response.statusCode == 200) {
+        if (response && response.statusCode == 200) {        
             api.makeRequest('POST', `/v1/payouts/complete/${response.body.data.id}/${response.body.data.sender_amount}`).then(function (response1) {
                 if (response1 && response1.statusCode == 200) {
                     //Store this value in the db
-                    console.log('>>>>>payment complete response1<<<<')
-                    console.log(response1)
+                    db.exec(`UPDATE purchases SET is_refunded = 1 where merchant_id = '${req.query.merchant_reference_id}';`, (err) => console.log(err));
                     res.send(response1.body);
+                    
+                    return;
                 } else {
                     res.send(response1.body);
                 }
@@ -173,6 +171,23 @@ app.post('/createPayout', (req, res) => {
         res.send("an error occurred");
     })
 });
+
+app.get('/getRequiredFields', (req, res) => {
+    let country_lower = (req.query.country).toLowerCase();
+    let payment_name = `${country_lower}_general_bank`;
+    api.makeRequest('GET', `/v1/payouts/${payment_name}/details?beneficiary_country=${country_lower}&beneficiary_entity_type=individual&payout_amount=10000&payout_currency=${req.query.currency}&sender_country=us&sender_currency=${req.query.currency}&sender_entity_type=company`).then(function (response) {
+        if (response && response.statusCode == 200) {
+            res.send(response.body);
+        } else {
+            res.send(response.body);
+        }
+
+    }).catch(function (e) {
+        console.error(e.message);
+        res.send("an error occurred");
+    })
+
+})
 
 app.post('/createRefundPage', (req, res) => {
     result = db.prepare(`select preferred_country_iso2 from purchases where merchant_id='${req.query.merchant_reference_id}' and amt_paid > 0`).all()
@@ -316,6 +331,11 @@ app.get('/countries', (req, res) => {
 app.get('/getCheckout', (req, res) => {
     let result = db.prepare(`SELECT * from purchases where merchant_id = '${req.query.confirmation}';`).all();
     let issuing_id = result[0]['issuing_id']
+
+    if(result[0]['is_refunded'] == 1){
+        res.send({ "status": "SUCCESS", "refunded": true,  "price": '', "details" : '', 'purchase_info': ''});
+        return;
+    }
 
     api.makeRequest('GET', `/v1/issuing/bankaccounts/${issuing_id}`).then(function (response) {
         if (response && response.statusCode == 200) {
