@@ -1,0 +1,75 @@
+#world {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(#000000, #c7c9ea);
+  z-index: -1;
+}
+#hero{
+    width: 100%;
+    padding-top: 30vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#landing-title{
+    font-size:5em;
+    letter-spacing: 100px;
+    text-align: center;
+    font-weight: lighter;
+    padding-left: 100px;
+    transform-origin: center;
+}
+#landing-description{
+    font-size:1.5em;
+    letter-spacing: 15px;
+    padding-left: 15px;
+    text-align: center;
+    transform-origin: center; 
+}
+
+#hero input {
+    background: transparent;
+    /* padding: 20px 60px;
+    margin-top: 80px; */
+    border: 2px solid #262626;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #262626;
+}
+
+@media only screen and (max-width: 500px) {
+    #landing-title{
+        font-size:3em;
+        letter-spacing: 20px;
+        padding-left: 0px;
+        text-align: center;
+        font-weight: lighter;
+        transform-origin: center;
+    }
+    #landing-description{
+        font-size:1em;
+        letter-spacing: 10px;    
+        padding-left: 0px;
+        text-align: center;
+        transform-origin: center; 
+    }
+  }
+  
+  @media only screen and (max-width: 300px) {
+    #landing-title{
+        font-size:2em;
+        letter-spacing: 20px;
+        padding-left: 0px;
+        text-align: center;
+        font-weight: lighter;
+        transform-origin: center;
+    }
+    #landing-description{
+        font-size:.5em;
+        letter-spacing: 10px;    
+        text-align: center;
+        transform-origin: center; 
+    }
+  }

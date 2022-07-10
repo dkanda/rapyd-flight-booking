@@ -23,6 +23,7 @@ import { RapydService } from './services/rapyd.service';
 import { PurchaseSuccessComponent } from './components/paymentsuccess/purchase-success.component';
 import { CheckinComponent } from './components/checkin/checkin.component';
 import { TicketComponent } from './components/ticket/ticket.component';
+import { AboutComponent } from './components/about/about.component';
 
 @NgModule({
   declarations: [
@@ -32,13 +33,13 @@ import { TicketComponent } from './components/ticket/ticket.component';
     PurchaseFormComponent,
     NavBarComponent,
     ContactsBarComponent,
-    AboutBarComponent,
     HomePageComponent,
     ViewComponent,
     PlaceholderComponent,
     PurchaseSuccessComponent,
     CheckinComponent,
-    TicketComponent
+    TicketComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

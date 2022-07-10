@@ -11,7 +11,7 @@ const db = require('better-sqlite3')('sqlite.db', { verbose: console.log });
 const port = 3001;
 base_currency = "USD";
 base_country = "US"
-base_ewallet = "ewallet_4dc8ddccbb292b391ca2eb2b8f10e019"
+base_ewallet = "ewallet_af5f0ce09944024b8bd635a25f9cd933"
 const my_base_url = "http://raypd-flight-booking.vercelapp.com"
 const enforce_final_price = true;
 
@@ -91,7 +91,7 @@ app.post('/createClientWallet', (req, res) => {
                 }
             }
         },
-        "ewallet_reference_id": "space-tours",
+        "ewallet_reference_id": "1234",
         "metadata": {
             "merchant_defined": true
         },
@@ -111,8 +111,6 @@ app.post('/createClientWallet', (req, res) => {
         res.send("an error occurred");
     })
 })
-
-
 
 
 app.post('/createRefund', (req, res) => {
@@ -150,13 +148,13 @@ app.post('/createRefund', (req, res) => {
     }
 
     api.makeRequest('POST', '/v1/payouts', body).then(function (response) {
-        if (response && response.statusCode == 200) {        
+        if (response && response.statusCode == 200) {
             api.makeRequest('POST', `/v1/payouts/complete/${response.body.data.id}/${response.body.data.sender_amount}`).then(function (response1) {
                 if (response1 && response1.statusCode == 200) {
                     //Store this value in the db
                     db.exec(`UPDATE purchases SET is_refunded = 1 where merchant_id = '${req.query.merchant_reference_id}';`, (err) => console.log(err));
                     res.send(response1.body);
-                    
+
                     return;
                 } else {
                     res.send(response1.body);
@@ -274,10 +272,8 @@ app.post('/createCheckoutUrl', (req, res) => {
         }
     }
 
-    //body = utilities.encodeBase64Object(body);
     api.makeRequest('POST', '/v1/issuing/bankaccounts', body).then(function (response) {
         if (response && response.statusCode == 200) {
-            //Store this value in the db
 
             let account_number = "";
             let routing = response.body.data.bank_account.aba_routing_number === undefined ? "" : response.body.data.bank_account.aba_routing_number;
@@ -332,14 +328,13 @@ app.get('/getCheckout', (req, res) => {
     let result = db.prepare(`SELECT * from purchases where merchant_id = '${req.query.confirmation}';`).all();
     let issuing_id = result[0]['issuing_id']
 
-    if(result[0]['is_refunded'] == 1){
-        res.send({ "status": "SUCCESS", "refunded": true,  "price": '', "details" : '', 'purchase_info': ''});
+    if (result[0]['is_refunded'] == 1) {
+        res.send({ "status": "SUCCESS", "refunded": true, "price": '', "details": '', 'purchase_info': '' });
         return;
     }
 
     api.makeRequest('GET', `/v1/issuing/bankaccounts/${issuing_id}`).then(function (response) {
         if (response && response.statusCode == 200) {
-            //Store this value in the db
             let totalAmtPaid = 0.0;
             fxResult = db.prepare(`select rate from FX where sell='${result[0]['preferred_currency']}' and date = '${getDate()}'`).all()
             let fxRate = parseFloat(fxResult[0]['rate']);
