@@ -56,6 +56,9 @@ export class HomePageComponent implements OnInit {
         this.currencyService.setCurrencyFromCurrencyID(params['curId'])
         this.flightService.getFlightsByDestination(this.destination).subscribe(success => {
           this.dataArr = success;
+          for(let dest of this.dataArr ){
+            dest['duration'] = (new Date(dest.return).getTime() - (new Date(dest.departure)).getTime())/ (1000 * 60 * 60);
+          }
         });
       }
     );

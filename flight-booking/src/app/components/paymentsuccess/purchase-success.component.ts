@@ -38,21 +38,34 @@ export class PurchaseSuccessComponent implements OnInit {
   refundResponse = "";
   refunded = false;
   isError = false;
+  requiredFields: Array<object>;
+  refundFields = {};
 
   dataArr: object;
 
   constructor(private route: ActivatedRoute, private router: Router, private flightService: FlightService, protected selectedFlight: SelectedFlightService, protected currencyService: CurrencyService, protected rapydService: RapydService) { }
 
   requestRefund(payment_id, merchant_reference_id) {
-    this.rapydService.refundPayment(payment_id, merchant_reference_id).subscribe(success => {
-      if (success['status']['status'] == 'SUCCESS') {
-        this.refundResponse = "Refund was successful"
-      }
-      else {
-        console.log(success)
-      }
+    this.rapydService.getRequiredFields(this.dataArr['purchase_info']['preferred_country_iso2'], 
+      this.dataArr['purchase_info']['preferred_currency']).subscribe(success => {
+        this.requiredFields = success['data']['beneficiary_required_fields'];
+        for(let field of this.requiredFields){
+           
+          this.refundFields[field['name']] =  "";
+          if(field['name'] == "payment_type"){
+            this.refundFields[field['name']] = field['regex']
+          }         
+        }    
     })
+  }
 
+  processRefund(){
+    console.log(this.refundFields)
+    this.refundFields['merchant_reference_id'] = this.conf;
+    this.rapydService.processRefund(this.refundFields).subscribe(success => {
+      this.isError = false;
+      this.refunded = true;
+    })
   }
 
   check(){

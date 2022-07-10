@@ -38,8 +38,7 @@
 									Amount
 								</td>
 								<td>
-									{{(1000 + (dataArr.price*exchangeRate)/2) - dataArr.purchase_info.amt_paid *
-									exchangeRate |
+									{{((1000 + dataArr.price)/2 - dataArr.purchase_info.amt_paid)*exchangeRate |
 									currency:currencyService.selectedCurrencyCode:"symbol":".0-0"}}
 								</td>
 							</tr>
@@ -93,7 +92,6 @@
 								<td>{{txn.amount}}</td>
 								<td>{{txn.currency}}</td>
 							</tr>
-
 						</table>
 					</div>
 					<div *ngIf="refunded">
@@ -106,6 +104,7 @@
 						<h4>Made a mistake?</h4>
 						<div class="hlr-detail-1">
 							<input type="button" value="Request Refund"
+							    class="btn modal-trigger" href="#modal3"
 								(click)="requestRefund(dataArr.id, dataArr.merchant_reference_id)" />
 						</div>
 						<span [innerHTML]="refundResponse"></span>
@@ -116,3 +115,22 @@
 		<div class="col s1"></div>
 	</div>
 </div>
+
+<div id="modal3" class="modal" style="max-height: 100%;">
+    <div class="modal-content">
+		<h4>Complete the form to recieve your refund</h4>
+		<form #refundForm>
+			<div *ngFor="let field of requiredFields">
+				<div class="input-field col s6">
+					<label for="{{field.name}}" [hidden]="field.name == 'payment_type'">{{field.name.split('_').join(' ') | uppercase}}</label>
+					<input class="validate" type="text" [pattern]="field.regex" [(ngModel)]="refundFields[field.name]" id="{{field.name}}" name="{{field.name}}" [hidden]="field.name == 'payment_type'">
+				</div>
+			</div>
+			<input type="button" class="modal-close waves-effect waves-green btn-flat" value="Cancel"/>
+			<input type="button" class="modal-close waves-effect waves-green btn-flat" (click)="processRefund()" value="Request"/>
+		</form>
+	</div>
+    <div class="modal-footer">
+     
+    </div>
+  </div>

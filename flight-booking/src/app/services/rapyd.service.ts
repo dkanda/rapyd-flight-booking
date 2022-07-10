@@ -175,4 +175,60 @@ export class RapydService {
 
         return this.httpClient.get<Object>(`${this.basePath}/refundPayment?payment_id=${payment_id}&merchant_reference_number=${merchant_reference_id}`);
     }
+    
+    /**
+    * get checkout page
+    * 
+    */
+     public getRequiredFields(country: string, currency: string): Observable<Object> {
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+
+        // to determine the Content-Type header
+        // const consumes: string[] = [
+        //     'multipart/form-data'
+        // ];
+
+        // const canConsumeForm = this.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): void | HttpParams; };
+        let useForm = false;
+        let convertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+
+        formParams = new FormData();
+
+        return this.httpClient.get<Object>(`${this.basePath}/getRequiredFields?country=${country}&currency=${currency}`);
+    }
+
+    /**
+    * get checkout page
+    * 
+    */
+     public processRefund(params: any): Observable<Object> {
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+
+        // to determine the Content-Type header
+        // const consumes: string[] = [
+        //     'multipart/form-data'
+        // ];
+
+        // const canConsumeForm = this.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): void | HttpParams; };
+        let useForm = false;
+        let convertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+
+        formParams = new FormData();
+        let paramStr = new URLSearchParams(params).toString();
+        return this.httpClient.post<Object>(`${this.basePath}/createRefund?${paramStr}`, null);
+    }
 }

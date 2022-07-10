@@ -87,6 +87,9 @@
 	padding: 5px;
 	position: relative;
   }
+  .seat > label {
+	color: #000000;
+  }
   .seat:nth-child(3) {
 	margin-right: 14.2857142857%;
   }
@@ -291,7 +294,6 @@
   }
   
   .info, 
-  .seat, 
   .gate {
 		  padding: 10px 20px 5px;
 	}
