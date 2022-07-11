@@ -48,7 +48,7 @@
 					<div>
 						<h4>{{(data.price * exchangeRate) | currency:currencyService.selectedCurrencyCode:"symbol":".0-0"}}</h4>
 						<div class="hlr-detail-1">
-							<button (click) = "proceedToPurchase(data)">Purchase</button>
+							<button class="btn" (click) = "proceedToPurchase(data)">Purchase</button>
 						</div>
 					</div>
 				</div>

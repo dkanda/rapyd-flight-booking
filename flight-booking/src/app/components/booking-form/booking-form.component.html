@@ -1,32 +1,35 @@
-<form>
+<div class="row">
+  
+  <div class="col s8 offset-s2 m12" style="background-color: white;border-radius:20px;">
+    <form>
       <div class="row">
         <div class="col s1"></div>
         <div class="col s5">
           <h3>Origin</h3>
           <div class="input-field">
-            <input class="" placeholder="Earth, (Texas)" type="text"
-               name="destination" readonly>
+            <input class="" placeholder="Earth, (Florida)" type="text" name="destination" readonly>
           </div>
         </div>
         <div class="col s5">
           <h3>Destination</h3>
           <div class="input-field">
-            <input class="white grey-text autocomplete-destination" placeholder="Mars, ISS" type="text"
-              id="autocomplete-destination" name="destination" [(ngModel)]="destination">
+            <input class="autocomplete-destination" placeholder="Mars, ISS" type="text" id="autocomplete-destination"
+              name="destination" [(ngModel)]="destination">
           </div>
         </div>
         <div class="col s1"></div>
       </div>
-    <div class="row">
-      <div class="col s1"></div>
-      <div class="col s10">
-        <h3>Your Currency and Country</h3>
-        <select style="display: block" name="selectedCurrencyID" required [(ngModel)]="selectedCurrencyID"> 
-          <option *ngFor="let plan of currencies" [ngValue]="plan.id">{{ plan.name }} - {{ plan.currency_code }}</option>
-        </select>
+      <div class="row">
+        <div class="col s1"></div>
+        <div class="col s10">
+          <h3>Your Currency and Country</h3>
+          <select style="display: block" name="selectedCurrencyID" required [(ngModel)]="selectedCurrencyID">
+            <option *ngFor="let plan of currencies" [ngValue]="plan.id">{{ plan.name }} - {{ plan.currency_code }}
+            </option>
+          </select>
+        </div>
+        <div class="col s1"></div>
       </div>
-      <div class="col s1"></div>
-    </div>
       <div class="row">
         <div class="col s1"></div>
         <div class="col s10">
@@ -36,10 +39,14 @@
         <div class="col s1"></div>
       </div>
       <div class="row">
-        <div class="col s4"></div>
-        <div class="col s4">
-          <input type="button" value="submit booking" (click)="processData()">
+        <div class="col s1"></div>
+        <div class="col s10">
+          <input type="button" style="width:100%" class="btn waves-effect waves-light" value="submit booking"
+            (click)="processData()">
         </div>
-        <div class="col s4"></div>
+        <div class="col s1"></div>
       </div>
-</form>
+    </form>
+  </div>
+  
+</div>

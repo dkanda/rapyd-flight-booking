@@ -186,3 +186,7 @@ input[type = "button"]{
     height: 150px;
   }
 } */
+
+.btn{
+  background-color: #ff5722;
+  }

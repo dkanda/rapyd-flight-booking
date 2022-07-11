@@ -35,15 +35,15 @@ table tr td{
     
     width: 150px;
 }
-input[type = "button"]{
+/* input[type = "button"]{
     width: 293px;
-    height: 37px;
+    height: 37px; 
     border-radius: 2px;
     background: transparent;
     border: 2px solid;
     cursor: pointer;
     color: #262626;
-}
+} */
 
 h3{
     font-size: 1.5em;
