@@ -43,7 +43,7 @@
 								</td>
 							</tr>
 						</table>
-						<input type="button" value="check" (click)="check()" />
+						<input type="button" class="btn waves-effect waves-light" value="check" (click)="check()" />
 					</div>
 					<div *ngIf="!refunded && !isError">
 						<h3> Your deposit is recieved! Confimation code: {{dataArr.merchant_reference_id}}</h3>

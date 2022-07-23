@@ -31,7 +31,8 @@ function seedDb(){
         final_checkout_id text,
         is_refunded integer default 0,
         preferred_currency text default "USD",
-        preferred_country_iso2 text default "US");`
+        preferred_country_iso2 text default "US",
+        wallet_id text NOT NULL);`
     db.exec(createPurchasesTable, (err)=> console.log(err));
 
     const createFxTable = `CREATE TABLE fx (

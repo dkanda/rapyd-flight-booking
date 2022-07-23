@@ -43,7 +43,7 @@
 		
 								</table>
 							</div>
-							<div *ngIf="!refunded && !isError && conf && !isPaid">
+							<ng-template *ngIf="!refunded && !isError && conf && !isPaid">
 								<h3> Finish payment to complete checkin</h3>
 								Amount: {{dataArr.amount}} {{dataArr.currency_code}}<br />
 								<table style="border:none">
@@ -97,7 +97,7 @@
 											</tr>
 										</ng-template>										
 									</table>
-							</div>
+							</ng-template>
 							<div *ngIf="refunded">
 								<h3> Your flight was successfully refunded: {{dataArr.amount}} {{dataArr.currency_code}}</h3>
 								Please fly again with us soon <br />
@@ -232,12 +232,12 @@
 			<header>Boarding Pass</header>
 			<section class="airport">
 			  <div class="ap1">
-			  <span class="boarding-pass-h2">TX</span>
-			  <span class="boarding-pass-h3">Earth (Texas)</span>
+			  <span class="boarding-pass-h2">FL</span><br/>
+			  <span class="boarding-pass-h3">Earth (Florida)</span>
 			  </div>
 			  
 			  <div class="ap2">
-				<span class="boarding-pass-h2">{{flights['destination'].slice(0, 3) | uppercase}}</span>
+				<span class="boarding-pass-h2">{{flights['destination'].slice(0, 3) | uppercase}}</span><br/>
 				<span class="boarding-pass-h3">{{flights['destination']}}</span>
 			  </div>
 			</section>
