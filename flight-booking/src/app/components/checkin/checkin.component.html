@@ -97,6 +97,7 @@
 											</tr>
 										</ng-template>										
 									</table>
+									<input type="button" class="btn waves-effect waves-light" value="check" (click)="getData()" />
 							</ng-template>
 							<div *ngIf="refunded">
 								<h3> Your flight was successfully refunded: {{dataArr.amount}} {{dataArr.currency_code}}</h3>
@@ -124,7 +125,6 @@
 		<div class="col s1"></div>
 	</div>
 </div>
-<ng-template *ngIf="isPaid">
 <!-- Pick a seat modal-->
   <!-- Modal Structure -->
   <div id="modal1" class="modal">
@@ -272,4 +272,3 @@
     </div>
   </div>
 </div>
-</ng-template>

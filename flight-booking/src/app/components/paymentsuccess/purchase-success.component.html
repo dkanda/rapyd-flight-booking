@@ -47,8 +47,8 @@
 					</div>
 					<div *ngIf="!refunded && !isError">
 						<h3> Your deposit is recieved! Confimation code: {{dataArr.merchant_reference_id}}</h3>
-						Amount: {{dataArr.purchase_info.amt_paid*exchangeRate |
-						currency:currencyService.selectedCurrencyCode:"symbol":".0-0"}}<br />
+						<h4>Amount Paid: {{dataArr.purchase_info.amt_paid*exchangeRate |
+						currency:currencyService.selectedCurrencyCode:"symbol":".0-0"}}</h4><br />
 						<table style="border:none">
 							<tr style="border:none">
 								<td style="padding: 5px 5px;">

@@ -513,7 +513,7 @@ app.get('/getExchange', (req, res) => {
     api.makeRequest('GET', `/v1/rates/daily?action_type=payment&buy_currency=${buy_currency}&sell_currency=${sell_currency}`).then(function (response) {
         if (response && response.statusCode == 200) {
             //Store this value in the db
-            db.exec(`INSERT OR REPLACE INTO FX (buy, sell, rate, date) VALUES ('${buy_currency}','${sell_currency}',${response.body.data.rate},'${response.body.data.date}')`, (err) => console.log(err));
+            db.exec(`INSERT OR REPLACE INTO FX (buy, sell, rate, date) VALUES ('${buy_currency}','${sell_currency}',${response.body.data.rate},'${todayString}')`, (err) => console.log(err));
             res.send(response.body.data);
         } else {
             res.send(response.body);

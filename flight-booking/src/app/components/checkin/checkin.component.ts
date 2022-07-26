@@ -70,47 +70,54 @@ export class CheckinComponent implements OnInit {
     
   }
 
+  check() {
+
+  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(
       params => {
         if('conf' in params){
           this.conf = params['conf'];
-          this.rapydService.getCheckout(this.conf).subscribe(success => {
-            if (success['status'] == 'ERROR'){
-              this.isError = true;
-              this.dataArr = success;
-              console.log(success)
-            } else {
-              this.dataArr = success['details']
-              this.refunded = this.dataArr['refunded']
-              this.dataArr['purchase_info'] = success['purchase_info']
-              this.dataArr['price'] = success['price']
-              this.currencyService.selectedCurrencyCode = success['purchase_info']['preferred_currency'];
-              this.currencyService.selectedCountryCode = success['purchase_info']['preferred_country_iso2'];
-              this.flightService.getFlights(success['purchase_info']['flightNo']).subscribe(success => {
-                this.flights = success;
-              });
-              if(success['purchase_info']['amt_paid'] >=  (this.dataArr['price'] - 1)){
-                this.isPaid = true;
-              }
-
-            }
-            if (this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] === undefined){
-              this.rapydService.getExchangeRate("USD", this.currencyService.selectedCurrencyCode).subscribe(exchangeRate => {
-                console.log(exchangeRate);
-                this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] = 1/exchangeRate.rate;
-                // Store the exchange rate since it only changes once/day
-                sessionStorage.setItem(exchangeRate.sell_currency, (1/exchangeRate.rate).toString());
-              });
-            }
-            else {
-              this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode];
-            }          
-          })
+          this.getData()
         }        
       }
     );
+  }
+
+  getData(){
+    this.rapydService.getCheckout(this.conf).subscribe(success => {
+      if (success['status'] == 'ERROR'){
+        this.isError = true;
+        this.dataArr = success;
+      } else {
+        this.isError = false;
+        this.dataArr = success['details']
+        this.refunded = this.dataArr['refunded']
+        this.dataArr['purchase_info'] = success['purchase_info']
+        this.dataArr['price'] = success['price']
+        this.currencyService.selectedCurrencyCode = success['purchase_info']['preferred_currency'];
+        this.currencyService.selectedCountryCode = success['purchase_info']['preferred_country_iso2'];
+        this.flightService.getFlights(success['purchase_info']['flightNo']).subscribe(success => {
+          this.flights = success;
+        });
+        if(success['purchase_info']['amt_paid'] >=  (this.dataArr['price'] - 1)){
+          this.isPaid = true;
+        }
+
+      }
+      if (this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] === undefined){
+        this.rapydService.getExchangeRate("USD", this.currencyService.selectedCurrencyCode).subscribe(exchangeRate => {
+          console.log(exchangeRate);
+          this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] = 1/exchangeRate.rate;
+          // Store the exchange rate since it only changes once/day
+          sessionStorage.setItem(exchangeRate.sell_currency, (1/exchangeRate.rate).toString());
+        });
+      }
+      else {
+        this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode];
+      }          
+    })
   }
 
   finishPayment(){
