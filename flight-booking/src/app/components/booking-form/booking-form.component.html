@@ -12,10 +12,10 @@
         </div>
         <div class="col s5">
           <h3>Destination</h3>
-          <div class="input-field">
-            <input class="autocomplete-destination" placeholder="Mars, ISS" type="text" id="autocomplete-destination"
-              name="destination" [(ngModel)]="destination">
-          </div>
+          <select style="display: block" name="destination" required [(ngModel)]="destination">
+            <option *ngFor="let route of ['Mars', 'Andromeda', 'Moon']" [ngValue]="route">{{ route }}
+            </option>
+          </select>
         </div>
         <div class="col s1"></div>
       </div>

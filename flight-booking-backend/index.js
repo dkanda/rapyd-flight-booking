@@ -6,7 +6,7 @@ const app = express();
 var cors = require('cors')
 
 const bodyParser = require('body-parser');
-const db = require('better-sqlite3')('sqlite.db', { verbose: console.log });
+const db = require('better-sqlite3')('sqlite.db', { });
 
 const port = 3001;
 base_currency = "USD";
