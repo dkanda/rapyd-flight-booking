@@ -8,13 +8,13 @@ import {
 
 import { FlightService } from '../../services/flight.service'
 import { Flight } from '../../model/flight';
-import {DailyRate} from '../../model/dailyRate';
+import { DailyRate } from '../../model/dailyRate';
 import { SelectedFlightService } from 'src/app/services/selectedFlight.service';
 import { CurrencyService } from 'src/app/services/currency.service';
 
 import { RapydService } from 'src/app/services/rapyd.service';
 
-declare const QRCode:any;
+declare const QRCode: any;
 
 
 @Component({
@@ -40,6 +40,7 @@ export class CheckinComponent implements OnInit {
   refunded = false;
   isError = false;
   isPaid = false;
+  intervalId: any;
 
   dataArr: object;
 
@@ -47,47 +48,44 @@ export class CheckinComponent implements OnInit {
 
   requestRefund(payment_id, merchant_reference_id) {
     this.rapydService.refundPayment(payment_id, merchant_reference_id).subscribe(success => {
-      if(success['status']['status'] == 'SUCCESS'){
+      if (success['status']['status'] == 'SUCCESS') {
         this.refundResponse = "Refund was successful"
       }
-      else{
+      else {
         console.log(success)
       }
-     
+
     })
-    
+
   }
 
-  processData(){
+  processData() {
     this.router.navigate(['checkin'], {
-      queryParams:{
+      queryParams: {
         'conf': this.confInput
       }
     });
   }
 
-  lookupReservation(){
-    
-  }
-
-  check() {
-
+  ngOnDestroy() {
+    clearInterval(this.intervalId);
   }
 
   ngOnInit() {
     this.route.queryParams.subscribe(
       params => {
-        if('conf' in params){
+        if ('conf' in params) {
           this.conf = params['conf'];
-          this.getData()
-        }        
+          this.getData();
+          this.intervalId = setInterval(() => { this.getData() }, 5000);
+        }
       }
     );
   }
 
-  getData(){
+  getData() {
     this.rapydService.getCheckout(this.conf).subscribe(success => {
-      if (success['status'] == 'ERROR'){
+      if (success['status'] == 'ERROR') {
         this.isError = true;
         this.dataArr = success;
       } else {
@@ -101,33 +99,34 @@ export class CheckinComponent implements OnInit {
         this.flightService.getFlights(success['purchase_info']['flightNo']).subscribe(success => {
           this.flights = success;
         });
-        if(success['purchase_info']['amt_paid'] >=  (this.dataArr['price'] - 1)){
+        if (success['purchase_info']['amt_paid'] >= (this.dataArr['price'] - 1)) {
           this.isPaid = true;
         }
+        clearInterval(this.intervalId);
 
       }
-      if (this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] === undefined){
+      if (this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] === undefined) {
         this.rapydService.getExchangeRate("USD", this.currencyService.selectedCurrencyCode).subscribe(exchangeRate => {
           console.log(exchangeRate);
-          this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] = 1/exchangeRate.rate;
+          this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode] = 1 / exchangeRate.rate;
           // Store the exchange rate since it only changes once/day
-          sessionStorage.setItem(exchangeRate.sell_currency, (1/exchangeRate.rate).toString());
+          sessionStorage.setItem(exchangeRate.sell_currency, (1 / exchangeRate.rate).toString());
         });
       }
       else {
         this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode];
-      }          
+      }
     })
   }
 
-  finishPayment(){
+  finishPayment() {
     //this.loading = true;
     this.rapydService.createCheckoutPage({
-      currency: this.currencyService.selectedCurrencyCode, 
-      country: this.currencyService.selectedCountryCode, 
+      currency: this.currencyService.selectedCurrencyCode,
+      country: this.currencyService.selectedCountryCode,
       flight: this.flights['id'],
       finalPayment: 1,
-      conf:this.conf
+      conf: this.conf
     }).subscribe(success => {
       console.log(success);
       document.location.href = success['url'];

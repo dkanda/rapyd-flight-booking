@@ -220,7 +220,6 @@ app.post('/createCheckoutUrl', (req, res) => {
                             "merchant_defined": true
                         }
                     }
-                    console.log(createVANBody)
                     api.makeRequest('POST', '/v1/issuing/bankaccounts', createVANBody).then(function (VANResponse) {
                         if (VANResponse && VANResponse.statusCode == 200) {
                             let account_number = "";
@@ -385,9 +384,7 @@ app.get('/getCheckout', (req, res) => {
             let price = flightDetails[0]['price']
 
             if (totalAmtPaid > 0.0) {
-                // Only update the price if it's less that the total price paid.
-                console.log(result[0]['amt_paid'])
-                console.log((1000 + (price)) / 2)
+                // Only update the price if it's less that the total price paid.        
                 db.exec(`UPDATE purchases SET amt_paid = ${totalAmtPaid} WHERE id = ${result[0]['id']};`, (err) => console.log(err));
                 result[0]['amt_paid'] = totalAmtPaid;
                 if (totalAmtPaid + 1 < price) {
@@ -504,7 +501,7 @@ app.get('/getExchange', (req, res) => {
     let sell_currency = req.query.sell_currency;
     let todayString = getDate();
     result = db.prepare(`SELECT rate from FX WHERE buy = '${buy_currency}' AND sell = '${sell_currency}' AND date = '${todayString}'`).all();
-    console.log(result)
+
     if (result !== undefined && result.length > 0) {
         res.send({ "sell_currency": sell_currency, "buy_currency": buy_currency, "fixed_side": null, "action_type": "payment", "rate": result[0]['rate'], "date": todayString, "sell_amount": null, "buy_amount": null })
         return;

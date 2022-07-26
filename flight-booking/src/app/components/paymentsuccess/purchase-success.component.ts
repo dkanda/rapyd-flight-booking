@@ -40,6 +40,7 @@ export class PurchaseSuccessComponent implements OnInit {
   isError = false;
   requiredFields: Array<object>;
   refundFields = {};
+  intervalId: any;
 
   dataArr: object;
 
@@ -79,10 +80,14 @@ export class PurchaseSuccessComponent implements OnInit {
         this.dataArr['price'] = success['price']
         this.dataArr['purchase_info'] = success['purchase_info']
         this.refunded = this.dataArr['refunded']
+        clearInterval(this.intervalId);
       }
   })
 }
 
+  ngOnDestroy() {
+    clearInterval(this.intervalId);
+  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(
@@ -91,7 +96,8 @@ export class PurchaseSuccessComponent implements OnInit {
         this.rapydService.getCheckout(this.conf).subscribe(success => {
           if (success['status'] == 'ERROR') {
             this.isError = true;
-            this.dataArr = success;            
+            this.dataArr = success;   
+            this.intervalId = setInterval(()=> {this.check()}, 5000);         
           } else {
             this.isError = false;
             this.dataArr = success['details']
@@ -119,6 +125,8 @@ export class PurchaseSuccessComponent implements OnInit {
             this.exchangeRate = this.rapydService.storedExchange[this.currencyService.selectedCurrencyCode];
           }
         })
+
+
       }
     );
   }
