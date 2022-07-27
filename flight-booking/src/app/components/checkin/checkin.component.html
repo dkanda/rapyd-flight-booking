@@ -43,7 +43,7 @@
 		
 								</table>
 							</div>
-							<ng-template *ngIf="!refunded && !isError && conf && !isPaid">
+							<ng-container *ngIf="!refunded && !isError && conf && !isPaid">
 								<h3> Finish payment to complete checkin</h3>
 								Amount: {{dataArr.amount}} {{dataArr.currency_code}}<br />
 								<table style="border:none">
@@ -86,7 +86,7 @@
 												{{dataArr.purchase_info.account_number}}
 											</td>
 										</tr>
-										<ng-template *ngIf="dataArr.purchase_info.routing !== null">
+										<ng-container *ngIf="dataArr.purchase_info.routing !== null">
 											<tr>
 												<td>
 													Routing Number
@@ -95,10 +95,9 @@
 													{{dataArr.purchase_info.routing}}
 												</td>
 											</tr>
-										</ng-template>										
+										</ng-container>										
 									</table>
-									<input type="button" class="btn waves-effect waves-light" value="check" (click)="getData()" />
-							</ng-template>
+							</ng-container>
 							<div *ngIf="refunded">
 								<h3> Your flight was successfully refunded: {{dataArr.amount}} {{dataArr.currency_code}}</h3>
 								Please fly again with us soon <br />
